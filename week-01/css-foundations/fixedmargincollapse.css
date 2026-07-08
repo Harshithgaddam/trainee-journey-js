@@ -1,0 +1,79 @@
+/* This file contains the css which solves the margin collapse problem*/
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* 2. The Parent Wrapper */
+.layout-container {
+  background: #f0f0f0;
+  width: 100%;
+  display: flex; 
+  flex-wrap: wrap; 
+}
+
+/* 3. The Header (Takes up the full top row) */
+.layout-header {
+  width: 100%; 
+  margin-top: 40px; 
+  background: #222;
+  color: #fff;
+  padding: 10px;
+}
+
+/* 4. The Columns (Sit side-by-side on the second row) */
+.layout-main {
+  width: 70%; 
+  padding: 20px;
+  border: 5px solid #333; /* Safely absorbed inside the 70% width due to border-box */
+  background: #e0e0e0;
+}
+
+.layout-sidebar {
+  width: 30%;
+  padding: 10px; /* Safely absorbed inside the 30% width due to border-box */
+  background: #d0d0d0;
+}
+
+/* conflicting rules for a element */
+/* Rule 1: Simple element tag selector */
+a {
+  color: red;
+}
+
+/* Rule 2: Highly specific ID and class descendant chain */
+#app .list-wrapper .item .link {
+  color: blue;
+}
+
+/* Rule 3: Heavy element type chain mixed with classes */
+div.container ul li.active a.link {
+  color: green;
+}
+
+/* Rule 4: ID combined with an element selector */
+#first-item a {
+  color: blueviolet;
+}
+
+/* Rule 5: ID combined with a class selector */
+#first-item .link {
+  color: purple;
+}
+
+/* Rule 6: Pseudo-class mixture with attribute selection */
+ul.list-wrapper li[data-role="primary"] a:hover {
+  color: pink;
+}
+
+/* Rule 7: Dual ID chaining with a class selector */
+#app #first-item .link {
+  color: brown;
+}
+
+/* Rule 8: Advanced pseudo-class extracting the highest specificity weight */
+:is(#app, .container) #first-item a.link {
+  color: orange;
+}
