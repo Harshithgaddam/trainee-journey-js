@@ -1,0 +1,22 @@
+/*This fil contains the css which  makes the maargin collapse problem */
+.layout-container {
+  background: #f0f0f0;
+  width: 100%;
+}
+
+.layout-header {
+  margin-top: 40px; /* Causes margin collapse with .layout-container */
+  background: #222;
+  color: #fff;
+}
+
+.layout-main {
+  width: 70%;
+  padding: 20px;
+  border: 5px solid #333; /* Adds 50px total to width calculation */
+}
+
+.layout-sidebar {
+  width: 30%;
+  padding: 10px; /* Adds 20px total to width calculation */
+}
