@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holy grail layout using floats</title>
+    <style>
+        /* Legacy Floats */
+.container {
+  width: 100%;
+}
+
+/* Clearfix hack to contain floated children */
+.container::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.header, .footer {
+  width: 100%;
+  clear: both;
+  background-color:gray;
+  height: 70px;
+}
+
+.sidebar-left {
+  float: left;
+  width: 20%;
+  background-color:yellow;
+  height: 150px;
+}
+
+.main-content {
+  float: left;
+  width: 60%;
+    height: 150px;
+  background-color: rgb(0, 238, 255);
+}
+
+.sidebar-right {
+  float: right;
+  width: 20%;
+  background-color: yellow;
+  height: 150px;
+}
+.sidebar-right, .main-content ,.sidebar-left ,.header, .footer{
+    text-align: center;
+    line-height: 70px;
+}
+   </style>
+</head>
+<body>
+    <div class="container">
+  <header class="header">Header</header>
+  <aside class="sidebar-left">Left Sidebar</aside>
+  <main class="main-content">Main Content</main>
+  <aside class="sidebar-right">Right Sidebar</aside>
+  <footer class="footer">Footer</footer>
+</div>
+</body>
+</html>
