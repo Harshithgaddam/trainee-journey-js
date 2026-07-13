@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holy grail layut using flexbox</title>
+    <style>
+/* Flexbox implementation */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header, .footer {
+  flex:0 1 100px;
+  background-color:gray;
+}
+
+
+.middle-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.sidebar-left, .sidebar-right {
+  flex: 0 0 20%; 
+  background-color: rgb(255, 251, 9);
+}
+
+.main-content {
+  flex: 1; 
+  background-color:rgb(70, 255, 255);
+}
+.sidebar-right, .main-content ,.sidebar-left ,.header, .footer{
+  display: flex;
+    justify-content: center;
+    align-items: center;
+}
+    </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">Header</header>
+    
+    <div class="middle-wrapper">
+      <aside class="sidebar-left">Left Sidebar</aside>
+      <main class="main-content">Main Content</main>
+      <aside class="sidebar-right">Right Sidebar</aside>
+    </div>
+    <footer class="footer">Footer</footer>
+  </div>
+</body>
+</html>
