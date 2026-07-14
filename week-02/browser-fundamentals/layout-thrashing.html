@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layout Thrashing Demo</title>
+
+<style>
+
+body{
+    font-family:Arial, sans-serif;
+    padding:30px;
+}
+
+button{
+    padding:10px 20px;
+    margin:10px;
+    cursor:pointer;
+}
+
+.box{
+    width:150px;
+    height:25px;
+    background:steelblue;
+    margin:4px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Layout Thrashing Demo</h2>
+
+<button id="bad">Run Bad Example</button>
+<button id="good">Run Good Example</button>
+
+<div id="container"></div>
+
+<script>
+
+const container = document.getElementById("container");
+
+for(let i=0;i<500;i++){
+
+    const div=document.createElement("div");
+
+    div.className="box";
+
+    container.appendChild(div);
+
+}
+
+const boxes=document.querySelectorAll(".box");
+
+document.getElementById("bad").onclick=function(){
+
+    boxes.forEach(box=>{
+
+        box.style.width=Math.random()*300+"px";
+
+        box.offsetHeight;
+
+    });
+
+}
+
+document.getElementById("good").onclick=function(){
+
+    boxes.forEach(box=>{
+
+        box.style.width=Math.random()*300+"px";
+
+    });
+
+    container.offsetHeight;
+}
+
+</script>
+
+</body>
+</html>
