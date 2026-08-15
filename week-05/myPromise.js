@@ -123,3 +123,4 @@ class MyPromise {
         return new MyPromise((_, reject) => reject(reason));
     }
 }
+export default MyPromise;
