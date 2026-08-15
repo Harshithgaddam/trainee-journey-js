@@ -154,131 +154,275 @@ MyPromise.reject = function (reason) {
 
 };
 
-console.log("Example 1");
+MyPromise.all = function (iterable) {
+    return new MyPromise((resolve, reject) => {
 
-new MyPromise((resolve) => {
-    resolve("Hello World");
-})
+        const items = Array.from(iterable);
 
-.then(value => {
-    console.log(value);
-});
+        if (items.length === 0) {
+            resolve([]);
+            return;
+        }
 
-setTimeout(() => {
+        const results = [];
+        let completed = 0;
 
-console.log("Example 2");
+        items.forEach((item, index) => {
 
-MyPromise.resolve(10)
+            MyPromise.resolve(item)
+                .then(value => {
 
-.then(value => {
-    console.log(value);
-    return value + 5;
-})
+                    results[index] = value;
 
-.then(value => {
-    console.log(value);
-    return value * 2;
-})
+                    completed++;
 
-.then(value => {
-    console.log(value);
-});
+                    if (completed === items.length) {
+                        resolve(results);
+                    }
 
-
-},1000);
-
-setTimeout(() => {
-
-console.log("Example 3");
-
-MyPromise.resolve(5)
-
-.then(value => {
-
-    return new MyPromise(resolve => {
-
-        setTimeout(() => {
-
-            resolve(value * 10);
-
-        },1000);
-
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        });
     });
+};
 
-})
+MyPromise.race = function (iterable) {
 
-.then(value => {
+    return new MyPromise((resolve, reject) => {
 
-    console.log(value);
+        for (const item of iterable) {
 
-});
+            MyPromise.resolve(item)
+                .then(value => {
+                    resolve(value);
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        }
+    });
+};
 
-},2500);
 
-setTimeout(() => {
+MyPromise.allSettled = function (iterable) {
 
-console.log("Example 4");
+    return new MyPromise((resolve) => {
 
-MyPromise.resolve(20)
+        const items = Array.from(iterable);
 
-.then(value => {
+        if (items.length === 0) {
+            resolve([]);
+            return;
+        }
 
-    throw new Error("Calculation failed");
+        const results = [];
+        let completed = 0;
 
-})
+        items.forEach((item, index) => {
 
-.catch(error => {
+            MyPromise.resolve(item)
+                .then(value => {
 
-    console.log(error.message);
+                    results[index] = {
+                        status: "fulfilled",
+                        value: value
+                    };
 
-});
+                    completed++;
 
-},5000);
+                    if (completed === items.length) {
+                        resolve(results);
+                    }
 
-setTimeout(() => {
+                })
+                .catch(error => {
 
-console.log("Example 5");
+                    results[index] = {
+                        status: "rejected",
+                        reason: error
+                    };
 
-MyPromise.resolve("Downloaded")
+                    completed++;
 
-.finally(() => {
+                    if (completed === items.length) {
+                        resolve(results);
+                    }
+                });
+        });
+    });
+};
 
-    console.log("Cleaning resources");
+MyPromise.any = function (iterable) {
 
-})
+    return new MyPromise((resolve, reject) => {
 
-.then(value => {
+        const items = Array.from(iterable);
 
-    console.log(value);
+        if (items.length === 0) {
+            reject(new AggregateError([], "All promises were rejected"));
+            return;
+        }
 
-});
+        const errors = [];
+        let rejectedCount = 0;
 
-},6500);
+        items.forEach((item, index) => {
 
-setTimeout(() => {
+            MyPromise.resolve(item)
+                .then(value => {
 
-console.log("Example 6");
+                    // First fulfilled promise wins
+                    resolve(value);
 
-const promise = new MyPromise(resolve => {
+                })
+                .catch(error => {
 
-    setTimeout(() => {
+                    errors[index] = error;
+                    rejectedCount++;
 
-        resolve("Done");
+                    // Every promise rejected
+                    if (rejectedCount === items.length) {
+                        reject(
+                            new AggregateError(
+                                errors,
+                                "All promises were rejected"
+                            )
+                        );
+                    }
+                });
+        });
+    });
+};
 
-    },1000);
 
-});
+// console.log("Example 1");
 
-promise.then(value => {
-    console.log("A:", value);
-});
+// new MyPromise((resolve) => {
+//     resolve("Hello World");
+// })
 
-promise.then(value => {
-    console.log("B:", value);
-});
+// .then(value => {
+//     console.log(value);
+// });
 
-promise.then(value => {
-    console.log("C:", value);
-});
+// setTimeout(() => {
 
-},8000);
+// console.log("Example 2");
+
+// MyPromise.resolve(10)
+
+// .then(value => {
+//     console.log(value);
+//     return value + 5;
+// })
+
+// .then(value => {
+//     console.log(value);
+//     return value * 2;
+// })
+
+// .then(value => {
+//     console.log(value);
+// });
+
+
+// },1000);
+
+// setTimeout(() => {
+
+// console.log("Example 3");
+
+// MyPromise.resolve(5)
+
+// .then(value => {
+
+//     return new MyPromise(resolve => {
+
+//         setTimeout(() => {
+
+//             resolve(value * 10);
+
+//         },1000);
+
+//     });
+
+// })
+
+// .then(value => {
+
+//     console.log(value);
+
+// });
+
+// },2500);
+
+// setTimeout(() => {
+
+// console.log("Example 4");
+
+// MyPromise.resolve(20)
+
+// .then(value => {
+
+//     throw new Error("Calculation failed");
+
+// })
+
+// .catch(error => {
+
+//     console.log(error.message);
+
+// });
+
+// },5000);
+
+// setTimeout(() => {
+
+// console.log("Example 5");
+
+// MyPromise.resolve("Downloaded")
+
+// .finally(() => {
+
+//     console.log("Cleaning resources");
+
+// })
+
+// .then(value => {
+
+//     console.log(value);
+
+// });
+
+// },6500);
+
+// setTimeout(() => {
+
+// console.log("Example 6");
+
+// const promise = new MyPromise(resolve => {
+
+//     setTimeout(() => {
+
+//         resolve("Done");
+
+//     },1000);
+
+// });
+
+// promise.then(value => {
+//     console.log("A:", value);
+// });
+
+// promise.then(value => {
+//     console.log("B:", value);
+// });
+
+// promise.then(value => {
+//     console.log("C:", value);
+// });
+
+// },8000);
+export default MyPromise;
