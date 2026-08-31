@@ -1,0 +1,7 @@
+2026-08-31 10:00:01 INFO Server started
+2026-08-31 10:01:22 INFO User logged in
+2026-08-31 10:02:10 WARN High memory usage
+2026-08-31 10:03:15 ERROR Database connection failed
+2026-08-31 10:04:20 INFO Request completed
+2026-08-31 10:05:33 ERROR File not found
+2026-08-31 10:06:10 WARN Slow response detected
