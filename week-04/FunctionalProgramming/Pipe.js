@@ -1,6 +1,6 @@
 function pipe(...fns) {
     return function (value) {
-        return fns.reduce((acc, fn) => fn(acc), value);
+        return fns.reduce((acc,fn) => fn(acc), value);
     };
 }
 const add1 = x => x + 1;
