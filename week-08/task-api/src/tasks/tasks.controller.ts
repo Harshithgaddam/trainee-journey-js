@@ -9,6 +9,10 @@ import {
 } from '@nestjs/common';
 
 import { TasksService } from './tasks.service';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
+import { ParseTaskStatusPipe } from './parse-task-status.pipe';
+import type { TaskStatus } from './task-status';
 
 @Controller('tasks')
 export class TasksController {
@@ -25,24 +29,36 @@ export class TasksController {
   findOne(@Param('id') id: string) {
     return this.tasksService.findOne(Number(id));
   }
+  @Get('status/:status')
+findByStatus(
+  @Param('status', ParseTaskStatusPipe) status: TaskStatus,
+) {
+  return this.tasksService.findByStatus(status);
+}
 
   @Post()
-  create(@Body() body: { title: string }) {
-    return this.tasksService.create(body.title);
+  create(
+    @Body() body: CreateTaskDto,
+     @Body('status', ParseTaskStatusPipe) status: TaskStatus,
+  ) {
+    return this.tasksService.create(
+      body.title,
+      body.completed,
+      status,
+    );
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() body: {
-      title: string;
-      completed: boolean;
-    },
+    @Body() body: UpdateTaskDto,
+    @Body('status', ParseTaskStatusPipe) status?: TaskStatus,
   ) {
     return this.tasksService.update(
       Number(id),
       body.title,
       body.completed,
+      status,
     );
   }
 

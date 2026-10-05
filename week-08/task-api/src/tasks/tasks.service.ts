@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { TaskStatus } from './task-status';
 
 export interface Task {
   id: number;
-  title: string;
+  title: string | undefined;
   completed: boolean;
+  status: TaskStatus;
 }
 
 @Injectable()
@@ -13,6 +15,7 @@ export class TasksService {
       id: 1,
       title: 'Learn NestJS',
       completed: false,
+      status: 'todo',
     },
   ];
 
@@ -32,26 +35,45 @@ export class TasksService {
     return task;
   }
 
-  create(title: string): Task {
-    const task: Task = {
-      id: this.nextId++,
-      title,
-      completed: false,
-    };
+  create(
+  title: string,
+  completed: boolean,
+  status: TaskStatus,
+): Task {
+  const task: Task = {
+    id: this.nextId++,
+    title,
+    completed,
+    status,
+  };
 
-    this.tasks.push(task);
+  this.tasks.push(task);
 
-    return task;
-  }
+  return task;
+}
 
-  update(id: number, title: string, completed: boolean): Task {
-    const task = this.findOne(id);
+  update(
+  id: number,
+  title?: string,
+  completed?: boolean,
+  status?: TaskStatus,
+) {
+  const task = this.findOne(id);
 
+  if (title !== undefined) {
     task.title = title;
-    task.completed = completed;
-
-    return task;
   }
+
+  if (completed !== undefined) {
+    task.completed = completed;
+  }
+  if (status !== undefined) {
+    task.status = status;
+  }
+
+  return task;
+}
+
 
   remove(id: number): void {
     const index = this.tasks.findIndex(task => task.id === id);
@@ -62,4 +84,8 @@ export class TasksService {
 
     this.tasks.splice(index, 1);
   }
+
+  findByStatus(status: TaskStatus): Task[] {
+  return this.tasks.filter(task => task.status === status);
+}
 }
