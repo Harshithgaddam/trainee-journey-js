@@ -3,7 +3,7 @@
 ## Order-placement flow
 
 An order placement should be treated as one database transaction:
-
+ We use BEGIN/START TRANSACTION to start the order transaction. Atomicity is achieved by executing all order operations in one transaction and using rollback on failure. Consistency is maintained through database constraints, Isolation is handled using FOR UPDATE for concurrent stock access, and Durability is achieved when the successful transaction is COMMITted.
 ```sql
 BEGIN;
 
