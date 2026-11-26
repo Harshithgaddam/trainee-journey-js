@@ -1,1 +1,1 @@
-{"type":"module","devDependencies":{"@types/jest":"^30.0.0","jest":"^30.4.2","ts-jest":"^29.4.12","typescript":"^5.9.3"}}
+{"type":"module","devDependencies":{"@types/jest":"^30.0.0","jest":"^30.4.2","ts-jest":"^29.4.12","typescript":"^5.9.3"},"dependencies":{"@nestjs/config":"^12.1.1","@nestjs/typeorm":"^12.0.3","dotenv":"^18.0.10","pg":"^8.23.1","typeorm":"^1.1.3"}}
